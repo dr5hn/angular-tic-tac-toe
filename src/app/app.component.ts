@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
     this.winner = this.calculateWinner();
   }
 
-  generateBoard() {
+  generateBoard() { // can be optimized as Array(9).fill(null)
     return [
       [
         '',
