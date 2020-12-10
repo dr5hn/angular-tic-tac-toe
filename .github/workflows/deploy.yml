@@ -8,11 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [14.x]
+
     steps:
+    - name: Checkout 🛎️
     - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
 
     - name: Cache node modules
       uses: actions/cache@v1
@@ -27,15 +32,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install
-      run: npm ci
+    - name: Install and Build 🔧
+      run: |
+        NODE_ENV=production npm i
+        npm run deploy --if-present
 
-    - name: Build Prod
-      run: npm run build -- --prod
-
-    - name: Deploy 
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:  
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: dist/tictactoe
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       BRANCH: gh-pages # The branch the action should deploy to.
+       FOLDER: dist/tictactoe # The folder the action should deploy.
+       CLEAN: true # Automatically remove deleted files from the deploy branch
