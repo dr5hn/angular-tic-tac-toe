@@ -34,7 +34,7 @@ jobs:
 
     - name: Install and Build 🔧
       run: |
-        NODE_ENV=production npm i
+        npm i
         npm run deploy --if-present
 
     - name: Deploy 🚀
